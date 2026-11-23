@@ -62,6 +62,9 @@ mod whiteboard;
 mod updater;
 
 mod ui_cm_interface;
+
+#[cfg(feature = "biometrix")]
+pub mod biometrix;
 mod ui_interface;
 mod ui_session_interface;
 

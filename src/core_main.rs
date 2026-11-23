@@ -29,6 +29,8 @@ macro_rules! my_println{
 /// If it returns [`Some`], then the process will continue, and flutter gui will be started.
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 pub fn core_main() -> Option<Vec<String>> {
+    #[cfg(feature = "biometrix")]
+    crate::biometrix::init();
     if !crate::common::global_init() {
         return None;
     }
@@ -608,6 +610,11 @@ pub fn core_main() -> Option<Vec<String>> {
             {
                 crate::ui_interface::start_option_status_sync();
                 crate::flutter::connection_manager::start_cm_no_ui();
+            }
+            #[cfg(all(feature = "biometrix", not(feature = "flutter")))]
+            {
+                crate::ui_interface::start_option_status_sync();
+                crate::biometrix::headless_cm::start();
             }
             return None;
         } else if args[0] == "--whiteboard" {
